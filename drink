@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+WALLET=${TESTNET_WALLET:="0x16A94747D128c3ebb779CE32A9Ecf125F3F89799"}
+
+/usr/local/bin/wget https://faucet.ropsten.be/donate/$WALLET
