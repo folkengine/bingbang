@@ -22,6 +22,10 @@ By default it will use [my Testnet wallet](https://ropsten.etherscan.io/address/
 
 Magnus Stahre's wonderful [git-crawl script](https://github.com/magnusstahre/git-stuff). I don't claim any legal rights to his code. I just like it.
 
+### rndpwd
+
+Generates a random password. Taken from [this article](https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/) by [@LowellHeddings](https://twitter.com/lowellheddings).
+
 ### testnet
 
 Fires up a local geth Ropsten(aka testnet) instance.
