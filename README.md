@@ -1,6 +1,4 @@
 # bingbang
-A mixture of gasoline and milk.
-
 BingBang is a collection of primarily Ethereum development shell scripts that I like to install on any system I am working on. 
 
 ## Usage
