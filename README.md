@@ -10,6 +10,10 @@ BingBang is a collection of primarily Ethereum development shell scripts that I 
 
 ## Bash Scripts
 
+### cloc-git
+
+Breaks down all the lines of code in a github repository. From [this Stack Overflow post](https://stackoverflow.com/a/29012789).
+
 ### drink
 
 Drink gets Eth from the [Ropsten Ethereum Testnet](https://ropsten.etherscan.io/). 
