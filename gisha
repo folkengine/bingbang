@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [[ $* == *--go* ]]
+then
+  echo ">>>> Updating sub directory git repos"
+  find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;
+else
+  echo ">>>> Preview of updating sub directory git repos"
+  find . -type d -depth 1 -exec echo git --git-dir={}/.git --work-tree=$PWD/{} status \;
+fi

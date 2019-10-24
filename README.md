@@ -20,6 +20,14 @@ Drink gets Eth from the [Ropsten Ethereum Testnet](https://ropsten.etherscan.io/
 
 By default it will use [my Testnet wallet](https://ropsten.etherscan.io/address/0x16a94747d128c3ebb779ce32a9ecf125f3f89799) unless you declare the TESTNET_WALLET environment variable. Run the command more than once a day and you will be greylisted for 24 hours. 
 
+### gisha
+
+Updates all git repos in subdirectories relative to where called. 
+
+```
+$> gisha --go
+```
+
 ### git-crawl
 
 Magnus Stahre's wonderful [git-crawl script](https://github.com/magnusstahre/git-stuff). I don't claim any legal rights to his code. I just like it.
