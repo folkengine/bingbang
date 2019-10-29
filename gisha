@@ -6,5 +6,6 @@ then
   find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;
 else
   echo ">>>> Preview of updating sub directory git repos"
+  echo ">>>> gisha --go to actually do it"
   find . -type d -depth 1 -exec echo git --git-dir={}/.git --work-tree=$PWD/{} status \;
 fi
