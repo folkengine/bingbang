@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if echo $* | grep -e "--heavy" -q
+then
+  minikube start --kubernetes-version v1.15.4 --cpus=4 --memory 10192 --disk-size='40000mb'
+else
+  minikube start --kubernetes-version v1.15.4 --cpus=2 --memory 4000 --disk-size='20000mb'
+fi
