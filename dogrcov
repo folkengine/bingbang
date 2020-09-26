@@ -2,6 +2,8 @@
 
 # Shell script to run grcov on a project.
 # https://github.com/mozilla/grcov
+#
+# Requires grcov be installed.
 
 rustup default nightly
 
