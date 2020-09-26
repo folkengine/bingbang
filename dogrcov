@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Shell script to run grcov on a project.
+# https://github.com/mozilla/grcov
+
 rustup default nightly
 
 export CARGO_INCREMENTAL=0
@@ -8,7 +11,6 @@ export RUSTDOCFLAGS="-Cpanic=abort"
 
 cargo clean
 cargo build
-
 cargo test
 
 grcov ./target/debug/ -s src -t html --llvm --branch --ignore-not-existing -o ./target/debug/coverage/
