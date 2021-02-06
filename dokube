@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -v
+#!/usr/bin/env bash
 
 if echo $* | grep -e "--heavy" -q
 then

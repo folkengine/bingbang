@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -v
+#!/usr/bin/env bash
 
 # https://developers.supportbee.com/blog/setting-up-cucumber-to-run-with-Chrome-on-Linux/
 # https://gist.github.com/curtismcmullan/7be1a8c1c841a9d8db2c
@@ -9,3 +9,53 @@
 # https://gist.github.com/ziadoz/3e8ab7e944d02fe872c3454d17af31a5
 # https://gist.github.com/dannymota/0878e11b901a46f491f19190f0acb4be
 
+# Verbose output
+set -x
+
+# Make sure you're running as root
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+# Versions
+CHROME_DRIVER_VERSION=`curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+SELENIUM_STANDALONE_VERSION=3.141.59
+SELENIUM_SUBDIR=$(echo "$SELENIUM_STANDALONE_VERSION" | cut -d"." -f-2)
+
+# Remove existing downloads and binaries so we can start from scratch.
+# apt-get remove google-chrome-stable
+# rm ~/selenium-server-standalone-*.jar
+# rm ~/chromedriver_linux64.zip
+# rm /usr/local/bin/chromedriver
+# rm /usr/local/bin/selenium-server-standalone.jar
+
+# Install dependencies.
+apt-get update
+apt-get install -y unzip openjdk-8-jre-headless xvfb libxi6 libgconf-2-4
+apt-get install -y default-jre fonts-dejavu-extra fonts-ipafont-gothic fonts-ipafont-mincho fonts-wqy-microhei fonts-wqy-zenhei fonts-indic
+
+# Install Chrome.
+curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+apt-get -y update
+# apt-get -y install google-chrome-stable
+apt-get -y install python3-pip
+apt-get -y install python3-selenium
+apt-get -y install python3-venv
+apt-get -y install chromium-chromedriver chromium-driver chromium-l10n chromium-shell
+
+# Install ChromeDriver.
+wget -N https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip -P ~/
+unzip ~/chromedriver_linux64.zip -d ~/
+rm ~/chromedriver_linux64.zip
+mv -f ~/chromedriver /usr/local/bin/chromedriver
+chown root:root /usr/local/bin/chromedriver
+chmod 0755 /usr/local/bin/chromedriver
+
+# Install Selenium.
+wget -N https://selenium-release.storage.googleapis.com/$SELENIUM_SUBDIR/selenium-server-standalone-$SELENIUM_STANDALONE_VERSION.jar -P ~/
+mv -f ~/selenium-server-standalone-$SELENIUM_STANDALONE_VERSION.jar /usr/local/bin/selenium-server-standalone.jar
+chown root:root /usr/local/bin/selenium-server-standalone.jar
+chmod 0755 /usr/local/bin/selenium-server-standalone.jar
