@@ -10,6 +10,11 @@ BingBang is a collection of primarily Ethereum development shell scripts that I 
 
 ## Bash Scripts
 
+### chivium
+
+Installs ChromeDriver and Selunium on Ubuntu 20.04. Based
+on [@dannymota's](https://gist.github.com/dannymota/0878e11b901a46f491f19190f0acb4be) version of [@ziadoz's gist](https://gist.github.com/ziadoz/3e8ab7e944d02fe872c3454d17af31a5).
+
 ### cloc-git
 
 Breaks down all the lines of code in a github repository. From [this Stack Overflow post](https://stackoverflow.com/a/29012789).
