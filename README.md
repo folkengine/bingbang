@@ -8,7 +8,11 @@ BingBang is a collection of primarily Ethereum development shell scripts that I 
 3. ...
 4. PROFIT!
 
-## Bash Scripts
+## Scripts
+
+### cargo-clappy
+
+Takes advantage of Rust Cargo's [ability to be extended](https://doc.rust-lang.org/book/ch14-05-extending-cargo.html) with custom commands. Running `cargo clappy` in the directory of Rust project will trigger clippy to be run in a super strict mode.
 
 ### chivium
 
