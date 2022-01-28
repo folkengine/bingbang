@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Source: https://git.savannah.gnu.org/gitweb/?p=lilypond.git;a=blob_plain;f=HACKING;hb=HEAD
+
+exec $LILY_SRC_DIR/out/bin/lilypond "$@"
