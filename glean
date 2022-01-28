@@ -1,4 +1,7 @@
-#!/usr/bin/env bash -v
+#!/usr/bin/env bash
+
+# Verbose output
+set -x
 
 git clean -fdx
 git restore *
