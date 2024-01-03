@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Checking that $EV_HOME is set
+if [[ -z "$EV_HOME" ]]; then
+    echo "EV_HOME is not set. Please set it to the root of the EVerest workspace"
+    exit 1
+else 
+    echo "EV_HOME is set to '$EV_HOME'"
+fi
+
+echo "Making sure packages pip, setuptools and wheel are available"
+python3 -m pip install --upgrade pip setuptools wheel
+
+echo "Installing needed libraries"
+sudo apt update
+sudo apt install -y python3-pip git rsync wget cmake doxygen graphviz build-essential clang-tidy cppcheck openjdk-17-jdk npm docker docker-compose libboost-all-dev nodejs libssl-dev libsqlite3-dev clang-format curl rfkill libpcap-dev libevent-dev pkg-config libcap-dev
+
+echo ""
+echo "Installing EVerest Dependency Manager: edm"
+cd $EV_HOME && git clone https://github.com/EVerest/everest-dev-environment.git
+cd "${EV_HOME}/everest-dev-environment/dependency_manager" && python3 -m pip install .
+
+echo ""
+echo "Installing EVerest Command Line Interface: ev-cli"
+edm init --workspace $EV_WORK 
+cd "${EV_WORK}/everest-utils/ev-dev-tools" && python3 -m pip install .
+
+echo ""
+echo "Installing Packages for ISO 15118 communication"
+cd "${EV_WORK}/Josev" && python3 -m pip install -r requirements.txt
+cd "${EV_WORK}/Josev/iso15118/shared/pki" && ./create_certs.sh -v iso-2 -i "${EV_WORK}/everest-core"

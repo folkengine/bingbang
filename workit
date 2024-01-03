@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+work_folder=~/src/github.com/abstecker/work/
+pkcore_folder=~/src/github.com/ImperialBower/pkcore/
+
+cd "$work_folder"
+pwd
+
+folders=(".github" "data" "docs" "examples" "generated" "scripts" "src" "tests")
+
+rm -rf target
+
+for i in "${folders[@]}"
+do
+   :
+   rm -rf "$i"
+done
+
+rm Cargo.lock
+
+files=("Cargo.toml" "LICENSE" ".markdownlint.yaml" "README.md")
+
+for i in "${folders[@]}"
+do
+   :
+   echo "copying $pkcore_folder$i"
+   cp -r "$pkcore_folder$i" "$work_folder"
+done
+
+for i in "${files[@]}"
+do
+   :
+   echo "copying $pkcore_folder$i"
+   cp -r "$pkcore_folder$i" "$work_folder"
+done
+
+cargo test
