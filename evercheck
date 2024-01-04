@@ -32,4 +32,4 @@ cd "${EV_WORK}/Josev/iso15118/shared/pki" && ./create_certs.sh -v iso-2 -i "${EV
 
 echo ""
 echo "Installing Packages for EVerest Python Testing"
-cd "${EV_WORK}/verest-utils/everest-testing" && python3 -m pip install .
+cd "${EV_WORK}/everest-utils/everest-testing" && python3 -m pip install .
