@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+docker network create --driver bridge --ipv6  --subnet fd00::/80 infranet_network --attachable
+cd $EV_WORK/everest-utils/docker && sudo docker-compose up -d mqtt-server

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+mkdir $EV_WORK/everest-core/build
+cd $EV_WORK/everest-core/build && cmake .. && make install
+
+# $EV_WORK/everest-core/build/run-scripts/run-sil.sh
+# $EV_WORK/everest-core/build/run-scripts/nodered-sil.sh
