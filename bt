@@ -9,6 +9,7 @@ fi
 filename="$1"
 
 touch "$filename"
+echo "#!/usr/bin/env bash" >> "$filename"
 chmod +x "$filename"
 
 echo "BAD TOUCH: $filename 🖕"
