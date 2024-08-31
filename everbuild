@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 
-mkdir $EV_WORK/everest-core/build
-cd $EV_WORK/everest-core/build && cmake .. && make install
+# mkdir $EV_WORK/everest-core/build
+# cd $EV_WORK/everest-core/build && cmake .. && make install
 
 # $EV_WORK/everest-core/build/run-scripts/run-sil.sh
 # $EV_WORK/everest-core/build/run-scripts/nodered-sil.sh
+
+# cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX="dist" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake -B build -G Ninja -DBUILD_TESTING=On -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=dist
+ninja -C build install
+
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=dist
+ninja -j$(nproc) -C build install
+cmake -B build -G Ninja -DBUILD_TESTING=On -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=dist
+
+

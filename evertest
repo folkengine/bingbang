@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# reset
+ninja -j$(nproc) -C build install
+ninja -j$(nproc) -C build test 
+
+# cat /workspaces/libocpp/build/Testing/Temporary/LastTest.log
+# cd build && ctest 
