@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+git commit -sS --amend --no-edit --allow-empty
