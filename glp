@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# https://www.youtube.com/watch?v=UuHFMOjNTyc
+# Also: git config --global alias.lp 'log --pretty=format:"%C(yellow)%h%Creset - %C(green)%an%Creset, %ar : %s"''
+alias glp='git log --pretty=format:"%C(yellow)%h%Creset - %C(green)%an%Creset, %ar : %s"'
