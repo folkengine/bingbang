@@ -51,6 +51,27 @@ $> gisha --go
 
 Magnus Stahre's wonderful [git-crawl script](https://github.com/magnusstahre/git-stuff). I don't claim any legal rights to his code. I just like it.
 
+### glovely
+
+Launches Balatro on macOS with the [Lovely](https://github.com/ethangreen-dev/lovely-injector) mod
+loader injected, by running the game directory's `run_lovely_macos.sh`. Looks in the standard Steam
+location unless $BALATRO_DIR is set. Any arguments are passed through to the game.
+
+### mdtxt
+
+Strips markdown down to its text. Headings, emphasis, link syntax, list markers
+and table pipes lose their punctuation but keep their words. Front matter, fenced
+code blocks, images, horizontal rules, HTML comments and reference definitions are
+dropped entirely. Reads files or stdin, writes to stdout, no dependencies beyond
+awk and sed.
+
+```
+$> mdtxt README.md
+$> mdtxt README.md > README.txt
+$> cat README.md | mdtxt
+$> mdtxt *.md | wc -w
+```
+
 ### rndpwd
 
 Generates a random password. Taken from [this article](https://www.howtogeek.com/howto/30184/10-ways-to-generate-a-random-password-from-the-command-line/) by [@LowellHeddings](https://twitter.com/lowellheddings).

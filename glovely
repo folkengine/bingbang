@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+balatro="${BALATRO_DIR:-/Users/$USER/Library/Application Support/Steam/steamapps/common/Balatro}"
+
+exec "$balatro/run_lovely_macos.sh" "$@"
