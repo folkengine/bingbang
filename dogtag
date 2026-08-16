@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# Tags the current git repo with a version and pushes the tag to origin.
+#
+#   $> dogtag 1.2.3
+#
+# Creates the annotated tag v1.2.3 with the message "version 1.2.3".
+
+set -euo pipefail
+
+version="${1:-}"
+
+if [[ -z "$version" ]]; then
+    echo "usage: dogtag <version>   (example: dogtag 1.2.3)" >&2
+    exit 1
+fi
+
+if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo "dogtag: '$version' is not a version. Use numbers only, as in 1.2.3" >&2
+    exit 1
+fi
+
+git tag -a "v$version" -m "version $version"
+git push origin --tag

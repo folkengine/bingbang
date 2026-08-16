@@ -23,6 +23,18 @@ on [@dannymota's](https://gist.github.com/dannymota/0878e11b901a46f491f19190f0ac
 
 Breaks down all the lines of code in a github repository. From [this Stack Overflow post](https://stackoverflow.com/a/29012789).
 
+### dogtag
+
+Tags the current git repo with a version and pushes the tag to origin. The version must be
+three numbers separated by dots. Anything else is refused before git is touched.
+
+```
+$> dogtag 1.2.3
+```
+
+Creates the annotated tag `v1.2.3` with the message `version 1.2.3`, then runs
+`git push origin --tag`.
+
 ### doly
 
 Runs a locally built copy of [lilypond](http://lilypond.org/index.html). Needs to have $LILY_SRC_DIR set
