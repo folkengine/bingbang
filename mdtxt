@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+
+# Strips markdown down to its text. Reads files or stdin, writes to stdout.
+#
+#   mdtxt README.md
+#   mdtxt README.md > README.txt
+#   cat README.md | mdtxt
+#   mdtxt *.md | wc -w
+
+usage() {
+    echo "Usage: ${0##*/} [file ...]" >&2
+    echo "       cat file.md | ${0##*/}" >&2
+}
+
+for arg in "$@"; do
+    case "$arg" in
+        -h|--help) usage; exit 0 ;;
+    esac
+done
+
+# Nothing piped in and nothing named, so there is nothing to strip
+if [ "$#" -eq 0 ] && [ -t 0 ]; then
+    usage
+    exit 1
+fi
+
+missing=0
+for file in "$@"; do
+    if [ ! -r "$file" ]; then
+        echo "${0##*/}: cannot read $file" >&2
+        missing=1
+    fi
+done
+if [ "$missing" -ne 0 ]; then
+    exit 1
+fi
+
+# Pass one: the block level things, which need to know about the lines around
+# them. Front matter, fenced code, rules, table separators and link definitions
+# all get dropped whole.
+strip_blocks() {
+    awk '
+        FNR == 1 { fence = ""; comment = 0; front = ($0 ~ /^---[ \t]*$/) ? 1 : 0
+                   if (front) next }
+
+        front { if ($0 ~ /^(---|\.\.\.)[ \t]*$/) front = 0; next }
+
+        # Fenced code blocks, contents and all
+        fence != "" { if (index($0, fence) == 1 || $0 ~ "^[ \t]*" fence) fence = ""
+                      next }
+        /^[ \t]*```/ { fence = "```"; next }
+        /^[ \t]*~~~/ { fence = "~~~"; next }
+
+        # HTML comments, including the ones spanning several lines
+        comment { if (sub(/^.*-->/, "")) comment = 0; else next }
+        { while (sub(/<!--([^-]|-[^-]|--[^>])*-->/, "")) ;
+          if (sub(/<!--.*$/, "")) comment = 1 }
+
+        # Horizontal rules and setext heading underlines
+        /^[ \t]*-([ \t]*-)+[ \t]*$/ { next }
+        /^[ \t]*\*([ \t]*\*)+[ \t]*$/ { next }
+        /^[ \t]*_([ \t]*_)+[ \t]*$/ { next }
+        /^[ \t]*=+[ \t]*$/ { next }
+
+        # Table separator rows: |---|:--:|
+        /^[ \t]*\|?[ \t]*:?-+:?[ \t]*(\|[ \t]*:?-+:?[ \t]*)+\|?[ \t]*$/ { next }
+
+        # Reference link definitions, but not footnote bodies
+        /^[ \t]*\[[^]^][^]]*\]:[ \t]*[^ \t]+[ \t]*$/ { next }
+        # Footnote bodies keep their text, lose their label
+        { sub(/^[ \t]*\[\^[^]]*\]:[ \t]*/, "") }
+
+        # Escaped punctuation goes into hiding so the span pass cannot mistake
+        # it for markup. The tr at the end of the pipe brings it back.
+        { gsub(/\\\*/, "\001"); gsub(/\\_/, "\002"); gsub(/\\`/, "\003")
+          gsub(/\\~/, "\004"); gsub(/\\\[/, "\005"); gsub(/\\\]/, "\006")
+          gsub(/\\</, "\016"); gsub(/\\\|/, "\017") }
+
+        { print }
+    ' "$@"
+}
+
+# Pass two: the inline spans. Every line stands on its own here, so sed is
+# enough. Order matters, images before links most of all.
+strip_spans() {
+    sed -E \
+        -e 's/^[[:space:]]*(> ?)+//' \
+        -e '/^[[:space:]]*#{1,6}([[:space:]]|$)/{ s/^[[:space:]]*#{1,6}[[:space:]]*//; s/[[:space:]]+#+[[:space:]]*$//; }' \
+        -e 's/^[[:space:]]*([-*+]|[0-9]+[.)])[[:space:]]+//' \
+        -e 's/^\[[ xX]\][[:space:]]*//' \
+        -e 's/\[\^[^]]*\]//g' \
+        -e 's/!\[[^]]*\]\([^)]*\)//g' \
+        -e 's/!\[[^]]*\]\[[^]]*\]//g' \
+        -e 's/\[([^]]*)\]\([^)]*\)/\1/g' \
+        -e 's/\[([^]]*)\]\[[^]]*\]/\1/g' \
+        -e 's/<((https?|ftp|mailto):[^> ]*)>/\1/g' \
+        -e 's/<([^ >@]+@[^ >]+)>/\1/g' \
+        -e 's/``([^`]*)``/\1/g' \
+        -e 's/`([^`]*)`/\1/g' \
+        -e 's/~~([^~]*)~~/\1/g' \
+        -e 's/\*\*([^*]+)\*\*/\1/g' \
+        -e 's/(^|[^[:alnum:]_])__([^_]+)__($|[^[:alnum:]_])/\1\2\3/g' \
+        -e 's/\*([^*]+)\*/\1/g' \
+        -e 's/(^|[^[:alnum:]_])_([^_]+)_($|[^[:alnum:]_])/\1\2\3/g' \
+        -e 's/<\/?[[:alnum:]][^>]*>//g' \
+        -e '/^[[:space:]]*\|/{ s/^[[:space:]]*\|[[:space:]]*//; s/[[:space:]]*\|[[:space:]]*$//; s/[[:space:]]*\|[[:space:]]*/  /g; }' \
+        -e 's/\\([^[:alnum:][:space:]])/\1/g' \
+        -e 's/[[:space:]]+$//'
+}
+
+# Pass three: drop the blank lines left behind by everything we removed
+squeeze() {
+    awk 'NF == 0 { blank = 1; next }
+         { if (blank && seen) print ""; blank = 0; seen = 1; print }'
+}
+
+# Bring the escaped punctuation back out of hiding
+unhide() {
+    tr '\001\002\003\004\005\006\016\017' '*_`~[]<|'
+}
+
+strip_blocks "$@" | strip_spans | squeeze | unhide
